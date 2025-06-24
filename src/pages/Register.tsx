@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { Car, User, Mail, Phone, MapPin, Star } from 'lucide-react';
+import { db } from '../Firebase/firebaseConfig.ts'; 
+import { collection, addDoc } from 'firebase/firestore';
+
 
 interface FormData {
   firstName: string;
@@ -8,6 +11,7 @@ interface FormData {
   phone: string;
   city: string;
   agreeToTerms: boolean;
+  password: string;
 }
 
 function Register() {
@@ -18,6 +22,7 @@ function Register() {
     phone: '',
     city: '',
     agreeToTerms: false,
+    password: '', 
   });
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
@@ -48,6 +53,11 @@ function Register() {
     if (!formData.phone.trim()) newErrors.phone = 'Teléfono es requerido';
     if (!formData.city.trim()) newErrors.city = 'Ciudad es requerida';
     if (!formData.agreeToTerms) newErrors.agreeToTerms = 'Debes aceptar los términos';
+    if (!formData.password.trim()) {
+  newErrors.password = 'Contraseña es requerida';
+} else if (formData.password.length < 6) {
+  newErrors.password = 'Mínimo 6 caracteres';
+}
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -58,11 +68,37 @@ function Register() {
 
     if (!validateForm()) return;
 
-    setIsSubmitting(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+  setIsSubmitting(true);
+
+  try {
+    await addDoc(collection(db, 'registros'), {
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone,
+      city: formData.city,
+      agreeToTerms: formData.agreeToTerms,
+      password: formData.password, 
+      createdAt: new Date()
+    });
+
     alert('¡Registro exitoso! Nuestro especialista en vehículos de lujo te contactará pronto.');
+    setFormData({
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      city: '',
+      agreeToTerms: false,
+      password: ''
+    });
+  } catch (error) {
+    console.error("Error al registrar:", error);
+    alert("Hubo un problema al registrar. Intenta nuevamente.");
+  } finally {
     setIsSubmitting(false);
-  };
+  }
+};
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center p-6">
@@ -165,6 +201,20 @@ function Register() {
               />
               {errors.city && <p className="text-red-500 text-sm mt-1">{errors.city}</p>}
             </div>
+            <div>
+  <label className="block text-sm font-medium text-gray-700 mb-2">
+    Contraseña
+  </label>
+  <input
+    type="password"
+    name="password"
+    value={formData.password}
+    onChange={handleInputChange}
+    className="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-black placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+    placeholder="••••••••"
+  />
+  {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
+</div>
 
             <div className="flex items-start gap-3">
               <input

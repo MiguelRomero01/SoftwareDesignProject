@@ -1,26 +1,50 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../Firebase/firebaseConfig";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     email: '',
     password: ''
   });
+  const navigate = useNavigate();
   const [focusedField, setFocusedField] = useState<string | null>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  setError(null); // limpia error al escribir
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value
+  });
+};
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Login attempt:', formData);
-  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const userCredential = await signInWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+    console.log("Usuario autenticado:", userCredential.user);
+    navigate("/dashboard");
+
+  } catch (error: any) {
+    console.error("Error de autenticación:", error);
+    if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password") {
+      setError("Email o contraseña incorrectos.");
+    } else {
+      setError("Ocurrió un error. Intenta de nuevo.");
+    }
+  } 
+}; 
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4">
@@ -140,6 +164,12 @@ function Login() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-200" />
               </span>
             </button>
+            {error && (
+  <p className="text-center text-red-500 text-sm mt-2">
+    {error}
+  </p>
+)}
+
           </form>
 
           {/* Divider */}

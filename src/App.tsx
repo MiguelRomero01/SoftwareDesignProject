@@ -3,6 +3,7 @@ import LandingPage from "./pages/landingPage";
 import Login from "@pages/login";
 import Register from "@pages/Register";
 
+
 const App = () => {
   return (
     <Routes>

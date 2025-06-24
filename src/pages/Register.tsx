@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Car, User, Mail, Phone, MapPin, Star } from 'lucide-react';
-import { db } from '../Firebase/firebaseConfig.ts'; 
 import { collection, addDoc } from 'firebase/firestore';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../Firebase/firebaseConfig';
+import { useNavigate } from 'react-router-dom';
+
+
 
 
 interface FormData {
@@ -24,6 +28,7 @@ function Register() {
     agreeToTerms: false,
     password: '', 
   });
+  const navigate = useNavigate();
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -64,25 +69,35 @@ function Register() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    if (!validateForm()) return;
+  if (!validateForm()) return;
 
   setIsSubmitting(true);
 
   try {
+    // 🔐 Crear usuario en Authentication
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      formData.email,
+      formData.password
+    );
+
+    const user = userCredential.user;
+
+    // 📝 Guardar en Firestore
     await addDoc(collection(db, 'registros'), {
+      uid: user.uid,
       firstName: formData.firstName,
       lastName: formData.lastName,
       email: formData.email,
       phone: formData.phone,
       city: formData.city,
       agreeToTerms: formData.agreeToTerms,
-      password: formData.password, 
       createdAt: new Date()
     });
 
-    alert('¡Registro exitoso! Nuestro especialista en vehículos de lujo te contactará pronto.');
+    alert('¡Registro exitoso!');
     setFormData({
       firstName: '',
       lastName: '',
@@ -92,9 +107,15 @@ function Register() {
       agreeToTerms: false,
       password: ''
     });
-  } catch (error) {
+    navigate('/login');
+
+  } catch (error: any) {
     console.error("Error al registrar:", error);
-    alert("Hubo un problema al registrar. Intenta nuevamente.");
+    if (error.code === 'auth/email-already-in-use') {
+      alert('El email ya está registrado.');
+    } else {
+      alert('Hubo un problema al registrar. Intenta nuevamente.');
+    }
   } finally {
     setIsSubmitting(false);
   }

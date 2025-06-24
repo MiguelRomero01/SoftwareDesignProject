@@ -33,7 +33,7 @@ function Login() {
       formData.password
     );
     console.log("Usuario autenticado:", userCredential.user);
-    navigate("/dashboard");
+    navigate("/");
 
   } catch (error: any) {
     console.error("Error de autenticación:", error);

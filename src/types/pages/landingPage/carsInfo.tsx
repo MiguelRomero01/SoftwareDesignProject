@@ -21,7 +21,7 @@ export const cars: CarData[] = [
     id: 2,
     name: "Toyota RAV4",
     image:
-      "https://images.pexels.com/photos/3802510/pexels-photo-3802510.jpeg?auto=compress&cs=tinysrgb&w=500",
+      "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Toyota_Land_Cruiser_250_VX.jpg/960px-Toyota_Land_Cruiser_250_VX.jpg",
     price: 65,
     rating: 4.9,
     type: "SUV",
@@ -66,7 +66,7 @@ export const cars: CarData[] = [
     id: 5,
     name: "Ford Explorer",
     image:
-      "https://images.pexels.com/photos/1319999/pexels-photo-1319999.jpeg?auto=compress&cs=tinysrgb&w=500",
+      "https://live.dealer-asset.co/images/br1166/news/ford-motor-colombia-presenta-la-nueva-explorer-st-v2.jpg?s=1024",
     price: 75,
     rating: 4.8,
     type: "SUV Grande",

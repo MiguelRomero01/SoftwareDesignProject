@@ -1,54 +1,7 @@
 import React from "react";
-import { Shield, Clock, MapPin, Phone, Car, CreditCard } from "lucide-react";
+import { services } from "@myTypes/pages/landingPage/services";
 
 const Services = () => {
-  const services = [
-    {
-      icon: Shield,
-      title: "Seguro Completo",
-      description: "Cobertura total para tu tranquilidad durante el viaje",
-      features: [
-        "Seguro contra daños",
-        "Protección de robo",
-        "Asistencia 24/7",
-      ],
-    },
-    {
-      icon: Clock,
-      title: "Servicio 24/7",
-      description: "Disponible las 24 horas, los 7 días de la semana",
-      features: ["Recogida nocturna", "Soporte telefónico", "Emergencias"],
-    },
-    {
-      icon: MapPin,
-      title: "Múltiples Ubicaciones",
-      description: "Recoge y devuelve en cualquiera de nuestras sucursales",
-      features: ["Aeropuertos", "Centros urbanos", "Hoteles principales"],
-    },
-    {
-      icon: Phone,
-      title: "Soporte Premium",
-      description: "Atención personalizada de nuestros expertos",
-      features: ["Chat en vivo", "Soporte telefónico", "Asistente personal"],
-    },
-    {
-      icon: Car,
-      title: "Flota Premium",
-      description: "Vehículos de última generación y perfectamente mantenidos",
-      features: [
-        "Modelos recientes",
-        "Mantenimiento regular",
-        "Limpieza profunda",
-      ],
-    },
-    {
-      icon: CreditCard,
-      title: "Pagos Flexibles",
-      description: "Múltiples opciones de pago para tu comodidad",
-      features: ["Tarjetas de crédito", "Paypal", "Transferencias"],
-    },
-  ];
-
   return (
     <section id="services" className="py-20 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -69,7 +22,7 @@ const Services = () => {
               className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 group"
             >
               <div className="flex items-center mb-6">
-                <div className="bg-gradient-to-r from-emerald-500 to-blue-700 group-hover:from-emerald-500 group-hover:to-emerald-600 p-3 rounded-xl transition-all duration-300">
+                <div className="bg-emerald-500   group-hover:bg-emerald-600 p-3 rounded-xl transition-all duration-300">
                   <service.icon className="h-6 w-6 text-white" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 ml-4">

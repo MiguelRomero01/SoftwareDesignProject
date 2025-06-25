@@ -4,8 +4,8 @@ export const navbarItems = [
   { link: "#home", label: "Inicio" },
   { link: "#services", label: "Servicios" },
   { link: "#about", label: "Nosotros" },
-  {link: '#reviews', label: 'Reseñas'},
   { link: "#cars", label: "Autos" },
+  { link: "#reviews", label: "Reseñas" },
   { link: "#contact", label: "Contacto" },
 ];
 
